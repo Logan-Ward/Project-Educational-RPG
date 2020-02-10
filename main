@@ -1,1 +1,54 @@
 # The code place
+import Tkinter
+from random import randint
+
+gameCleared = False
+Easy = ["1 X 1 = ?", "1 X 2 = ?", "1 X 3 = ?"]
+EasyAnswers = [1, 2, 3]
+Medium = ["11 X 11 = ?", "11 X 12 = ?", "11 X 13 = ?"]
+MediumAnswers = [121, 132, 143]
+Hard = ["6x + 8 = 50\nSolve for x", "-9x + 230 = 158\nSolve for x", "4x + 16 = 24"]
+HardAnswers = [7, 8, 2]
+
+def main():
+    pass
+
+if __name__ == '__main__':
+    main()
+
+class Character:
+  def __init__(self):
+    self.name = ""
+    self.health = 1
+    self.health_max = 1
+  def do_damage(self, enemy, damage):
+    pass
+
+class Enemy(Character):
+  def __init__(self, player):
+    Character.__init__(self)
+    self.name = ''
+    self.health = 1
+    self.lastAttack = 1
+
+class Player(Character):
+  def __init__(self):
+    Character.__init__(self)
+    self.health = 10
+    self.health_max = 10
+    self.score = 0
+  def attack(self, num):
+    pass
+  def enemy_attacks(self):
+    pass
+
+def Combat(self, Player, Enemy):
+  pass
+
+p = Player()
+e = Enemy()
+# insert dialogues here
+Combat(p, e)
+# insert dialogues here
+Combat(p, e)
+# insert dialogues here
