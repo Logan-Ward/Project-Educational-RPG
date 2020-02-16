@@ -1,4 +1,11 @@
 # The code place
+# ******IMPORTANT********
+# Five things to do in program:
+# -Apply correct images in correct positions
+# -Insert code for user numpad and button inputs
+# -Determine and implement a score system for player
+# -Bugfixing lol
+# -Comments lol
 import pygame
 from pygame.locals import *
 from random import randint
@@ -42,22 +49,22 @@ class App:
         if(self._forward == True and self._scene == 2):
           self._forward = False
           self._scene += 1
-          e1 = Enemy()
+          e1 = Character()
           self.on_combat(e1)
         if(self._forward == True and self._scene == 4):
           self._forward = False
           self._scene += 1
-          e2 = Enemy()
+          e2 = Character()
           self.on_combat(e2)
         if(self._forward == True and self._scene == 6):
           self._forward = False
           self._scene += 1
-          e3 = Enemy()
+          e3 = Character()
           self.on_combat(e3)
         if(self._forward == True and self._scene == 8):
           self._forward = False
           self._scene += 1
-          e4 = Enemy()
+          e4 = Character()
           self.on_combat(e4)
         if(self._forward == True and self._scene == 11):
           self._forward = False
@@ -126,14 +133,47 @@ class App:
           pygame.display.update
     def on_cleanup(self):
       pygame.quit()
+    def attack_screen(self):
+      self._display_surf.fill(black)
+      player_icon = pygame.image.load("Player_Icon")
+      self._display_surf.blit(player_icon, (0, 0))
+      enemy_icon = pygame.image.load("Enemy_Icon")
+      self._display_surf.blit(enemy_icon, (0, 0))
+      text = self._font.render("Health = {} / {}".format(self._player.health, self._player.health_max), True, white)
+      textRect = text.get_rect()
+      textRect.center = (X // 2, Y // 2) 
+      self._display_surf.blit(text, textRect) 
+      text = self._font.render("Health = {} / {}".format(e.health, e.health_max), True, white)
+      textRect = text.get_rect()
+      textRect.center = (X // 2, Y // 2) 
+      self._display_surf.blit(text, textRect) 
+      text = self._font.render("{}".format(self._player.name), True, white)
+      textRect = text.get_rect()
+      textRect.center = (X // 2, Y // 2) 
+      self._display_surf.blit(text, textRect) 
+      text = self._font.render("{}".format(e.name), True, white)
+      textRect = text.get_rect()
+      textRect.center = (X // 2, Y // 2) 
+      self._display_surf.blit(text, textRect)
     def on_combat(self, e):
       combat_scene = 0
       defense_round = False
+      chosen_attack = 0
       while(self._player.health > 0 and e.health > 0):
         attack_confirmed = False
-        chosen_attack = 0
+        if(combat_scene == 0):
+          self.attack_screen()
+          attack_options = pygame.image.load("Attack_Options")
+          self._display_surf.blit(attack_options, (700, 500))
+          pygame.display.update
         if(combat_scene == 0 and num_pad_one):
           combat_scene += 1
+          self.attack_screen()
+          attack_one = pygame.image.load("Attack_One")
+          self._display_surf.blit(attack_one, (700, 500))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
           while(not attack_confirmed):
             if (event.type == pygame.GreenButton):
               attack_confirmed = True
@@ -144,6 +184,12 @@ class App:
               combat_scene -= 1
         if(combat_scene == 0 and num_pad_two):
           combat_scene += 1
+          self.attack_screen()
+          attack_two = pygame.image.load("Attack_Two")
+          self._display_surf.blit(attack_two, (700, 500))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
           while(not attack_confirmed):
             if (event.type == pygame.GreenButton):
               attack_confirmed = True
@@ -154,6 +200,12 @@ class App:
               combat_scene -= 1
         if(combat_scene == 0 and num_pad_three):
           combat_scene += 1
+          self.attack_screen()
+          attack_three = pygame.image.load("Attack_Three")
+          self._display_surf.blit(attack_three, (700, 500))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
           while(not attack_confirmed):
             if (event.type == pygame.GreenButton):
               attack_confirmed = True
@@ -165,7 +217,6 @@ class App:
         if(combat_scene == 2):
           clock = pygame.time.Clock()
           timer = 10000
-          combat = True
           player_answer = 0
           problem = ''
           if(chosen_attack == 1):
@@ -181,20 +232,83 @@ class App:
             problem_txt = Hard[problem]
             answer = HardAnswers[problem]
           while(not (event.type == pygame.GreenButton) and timer > 0):
+            self.attack_screen()
+            text = self._font.render("{}".format(problem_txt), True, white)
+            textRect = text.get_rect()
+            textRect.center = (X // 2, Y // 2) 
+            self._display_surf.blit(text, textRect) 
+            text = self._font.render("{}".format(str(int(timer / 1000))), True, white)
+            textRect = text.get_rect()
+            textRect.center = (X // 2, Y // 2) 
+            self._display_surf.blit(text, textRect) 
+            text = self._font.render("{}".format(str(player_answer)), True, white)
+            textRect = text.get_rect()
+            textRect.center = (X // 2, Y // 2) 
+            self._display_surf.blit(text, textRect) 
+            if(defense_round):
+              text = self._font.render("Defend!", True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+            else:
+              text = self._font.render("Attack!", True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+            pygame.display.update
             timer -= 1
-            player_answer # need code for numpad inputs here
+            player_answer
+            clock.tick(100)
           if(player_answer == answer and not defense_round):
             self._player.do_damage(e, chosen_attack)
+            while(not (event.type == pygame.GreenButton)):
+              self.attack_screen()
+              green_Button = pygame.image.load("Green_Button")
+              self._display_surf.blit(green_Button, (700, 500))
+              text = self._font.render("You have dealt {} damage!".format(str(chosen_attack * 5)), True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+              pygame.display.update
             defense_round = True
           elif(player_answer == answer):
+            while(not (event.type == pygame.GreenButton)):
+              self.attack_screen()
+              green_Button = pygame.image.load("Green_Button")
+              self._display_surf.blit(green_Button, (700, 500))
+              text = self._font.render("You have defended against the attack!", True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+              pygame.display.update
             defense_round = False
             combat_scene = 0
+            chosen_attack = 0
           elif(defense_round):
             e.do_damage(self._player, chosen_attack)
+            while(not (event.type == pygame.GreenButton)):
+              self.attack_screen()
+              green_Button = pygame.image.load("Green_Button")
+              self._display_surf.blit(green_Button, (700, 500))
+              text = self._font.render("You have taken {} damage!".format(str(chosen_attack * 5)), True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+              pygame.display.update
             defense_round = False
+            combat_scene = 0
+            chosen_attack = 0
           else:
-            defense_round = True
-          
+            while(not (event.type == pygame.GreenButton)):
+              self.attack_screen()
+              green_Button = pygame.image.load("Green_Button")
+              self._display_surf.blit(green_Button, (700, 500))
+              text = self._font.render("{} defended against the attack!".format(e.name), True, white)
+              textRect = text.get_rect()
+              textRect.center = (X // 2, Y // 2) 
+              self._display_surf.blit(text, textRect) 
+              pygame.display.update
+            defense_round = True         
       if(self._player.health <= 0):
         self._scene = 11
       if(e.health <= 0):
@@ -212,23 +326,16 @@ class App:
 class Character:
   def __init__(self):
     self.name = ""
-    self.health = 1
-    self.health_max = 1
+    self.health = 60
+    self.health_max = 60
   def do_damage(self, target, damage):
-    pass
-
-class Enemy(Character):
-  def __init__(self, player):
-    Character.__init__(self)
-    self.name = ''
-    self.health = 1
-    self.lastAttack = 1
+    target.health -= damage * 5
 
 class Player(Character):
   def __init__(self):
     Character.__init__(self)
-    self.health = 10
-    self.health_max = 10
+    self.health = 100
+    self.health_max = 100
     self.score = 0
 
 if __name__ == "__main__" :
