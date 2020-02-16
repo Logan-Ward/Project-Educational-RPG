@@ -17,6 +17,7 @@ class App:
         self._scene = 0
         self._forward = False
         self._back = False
+        self._font = pygame.font.Font('freesansbold.ttf', 32)
         self._display_surf = None
         self.size = self.weight, self.height = 800, 600
         self.display.set_caption("Arithma")
@@ -118,8 +119,7 @@ class App:
           self._display_surf.blit(title_image, (0, 0))
           green_Button = pygame.image.load("Green_Button")
           self._display_surf.blit(green_Button, (700, 500))
-          font = pygame.font.Font('freesansbold.ttf', 32)
-          text = font.render("Score = {}\nHealth = {} / {}".format(self._player.score, self._player.health, self._player.health_max), True, white)
+          text = self._font.render("Score = {}\nHealth = {} / {}".format(self._player.score, self._player.health, self._player.health_max), True, white)
           textRect = text.get_rect()
           textRect.center = (X // 2, Y // 2) 
           self._display_surf.blit(text, textRect) 
@@ -127,13 +127,81 @@ class App:
     def on_cleanup(self):
       pygame.quit()
     def on_combat(self, e):
-      combat_Scene = 0
+      combat_scene = 0
+      defense_round = False
       while(self._player.health > 0 and e.health > 0):
-        pass
+        attack_confirmed = False
+        chosen_attack = 0
+        if(combat_scene == 0 and num_pad_one):
+          combat_scene += 1
+          while(not attack_confirmed):
+            if (event.type == pygame.GreenButton):
+              attack_confirmed = True
+              combat_scene += 1
+              chosen_attack = 1
+            if(event.type == pygame.RedButton):
+              attack_confirmed = True
+              combat_scene -= 1
+        if(combat_scene == 0 and num_pad_two):
+          combat_scene += 1
+          while(not attack_confirmed):
+            if (event.type == pygame.GreenButton):
+              attack_confirmed = True
+              combat_scene += 1
+              chosen_attack = 2
+            if(event.type == pygame.RedButton):
+              attack_confirmed = True
+              combat_scene -= 1
+        if(combat_scene == 0 and num_pad_three):
+          combat_scene += 1
+          while(not attack_confirmed):
+            if (event.type == pygame.GreenButton):
+              attack_confirmed = True
+              combat_scene += 1
+              chosen_attack = 3
+            if(event.type == pygame.RedButton):
+              attack_confirmed = True
+              combat_scene -= 1
+        if(combat_scene == 2):
+          clock = pygame.time.Clock()
+          timer = 10000
+          combat = True
+          player_answer = 0
+          problem = ''
+          if(chosen_attack == 1):
+            problem = randint(0, Easy.__len__())
+            problem_txt = Easy[problem]
+            answer = EasyAnswers[problem]
+          if(chosen_attack == 2):
+            problem = randint(0, Medium.__len__())
+            problem_txt = Medium[problem]
+            answer = MediumAnswers[problem]
+          if(chosen_attack == 3):
+            problem = randint(0, Hard.__len__())
+            problem_txt = Hard[problem]
+            answer = HardAnswers[problem]
+          while(not (event.type == pygame.GreenButton) and timer > 0):
+            timer -= 1
+            player_answer # need code for numpad inputs here
+          if(player_answer == answer and not defense_round):
+            self._player.do_damage(e, chosen_attack)
+            defense_round = True
+          elif(player_answer == answer):
+            defense_round = False
+            combat_scene = 0
+          elif(defense_round):
+            e.do_damage(self._player, chosen_attack)
+            defense_round = False
+          else:
+            defense_round = True
+          
+      if(self._player.health <= 0):
+        self._scene = 11
+      if(e.health <= 0):
+        self._scene += 1
     def on_execute(self):
         if self.on_init() == False:
             self._running = False
- 
         while( self._running ):
             for event in pygame.event.get():
                 self.on_event(event)
@@ -162,10 +230,6 @@ class Player(Character):
     self.health = 10
     self.health_max = 10
     self.score = 0
-  def attack(self, num):
-    pass
-  def enemy_attacks(self):
-    pass
 
 if __name__ == "__main__" :
     theApp = App()
