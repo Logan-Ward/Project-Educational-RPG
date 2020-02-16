@@ -1,0 +1,10 @@
+Easy_ULimit = 5
+Easy_LLimit = 1
+Medium_ULimit = 10
+Medium_LLimit = 5
+Hard_ULimit = 15
+Hard_LLimit = 10
+x = randint(Easy_LLimit, Easy_ULimit)
+y = randint(Easy_LLimit, Easy_ULimit
+problem = "{} * {} = ?".format(x, y)
+answer = x * y
