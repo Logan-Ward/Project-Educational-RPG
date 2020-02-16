@@ -1,8 +1,8 @@
 # The code place
-import Tkinter
+import pygame
+from pygame.locals import *
 from random import randint
 
-gameCleared = False
 Easy = ["1 X 1 = ?", "1 X 2 = ?", "1 X 3 = ?"]
 EasyAnswers = [1, 2, 3]
 Medium = ["11 X 11 = ?", "11 X 12 = ?", "11 X 13 = ?"]
@@ -10,18 +10,143 @@ MediumAnswers = [121, 132, 143]
 Hard = ["6x + 8 = 50\nSolve for x", "-9x + 230 = 158\nSolve for x", "4x + 16 = 24"]
 HardAnswers = [7, 8, 2]
 
-def main():
-    pass
+class App:
+    def __init__(self):
+        self._running = True
+        self._player = Player()
+        self._scene = 0
+        self._forward = False
+        self._back = False
+        self._display_surf = None
+        self.size = self.weight, self.height = 800, 600
+        self.display.set_caption("Arithma")
+        logo = pygame.image.load("Title_Image.png")
+        pygame.display.set_icon(logo)
+    def on_init(self):
+        pygame.init()
+        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self._running = True
+ 
+    def on_event(self, event):
+        if event.type == pygame.QUIT:
+            self._running = False
+        if event.type == pygame.GreenButton:
+          self._forward = True
+        if event.type == pygame.RedButton:
+          self._back = True
+    def on_loop(self):
+        if(self._forward == True and not (self._scene % 2 == 0) or self._scene == 10):
+          self._forward = False
+          self._scene += 1
+        if(self._forward == True and self._scene == 2):
+          self._forward = False
+          self._scene += 1
+          e1 = Enemy()
+          self.on_combat(e1)
+        if(self._forward == True and self._scene == 4):
+          self._forward = False
+          self._scene += 1
+          e2 = Enemy()
+          self.on_combat(e2)
+        if(self._forward == True and self._scene == 6):
+          self._forward = False
+          self._scene += 1
+          e3 = Enemy()
+          self.on_combat(e3)
+        if(self._forward == True and self._scene == 8):
+          self._forward = False
+          self._scene += 1
+          e4 = Enemy()
+          self.on_combat(e4)
+        if(self._forward == True and self._scene == 11):
+          self._forward = False
+          self._running = False
 
-if __name__ == '__main__':
-    main()
+    def on_render(self):
+        if(self._scene == 0):
+          self._display_surf.fill(black)
+          title_image = pygame.image.load("Title_Image")
+          self._display_surf.blit(title_image, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 1):
+          self._display_surf.fill(black)
+          gameplay_explanation = pygame.image.load("Gameplay_Image")
+          self._display_surf.blit(gameplay_explanation, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 2):
+          self._display_surf.fill(black)
+          dialogue_one = pygame.image.load("Dialogue_One")
+          self._display_surf.blit(dialogue_one, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 4):
+          self._display_surf.fill(black)
+          dialogue_two = pygame.image.load("Dialogue_Two")
+          self._display_surf.blit(dialogue_two, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 6):
+          self._display_surf.fill(black)
+          dialogue_three = pygame.image.load("Dialogue_Three")
+          self._display_surf.blit(dialogue_three, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 8):
+          self._display_surf.fill(black)
+          dialogue_four = pygame.image.load("Dialogue_Four")
+          self._display_surf.blit(dialogue_four, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 10):
+          self._display_surf.fill(black)
+          final_dialogue = pygame.image.load("Final_Dialogue")
+          self._display_surf.blit(final_dialogue, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          pygame.display.update
+        if(self._scene == 11):
+          self._display_surf.fill(black)
+          title_image = pygame.image.load("Title_Image")
+          self._display_surf.blit(title_image, (0, 0))
+          green_Button = pygame.image.load("Green_Button")
+          self._display_surf.blit(green_Button, (700, 500))
+          font = pygame.font.Font('freesansbold.ttf', 32)
+          text = font.render("Score = {}\nHealth = {} / {}".format(self._player.score, self._player.health, self._player.health_max), True, white)
+          textRect = text.get_rect()
+          textRect.center = (X // 2, Y // 2) 
+          self._display_surf.blit(text, textRect) 
+          pygame.display.update
+    def on_cleanup(self):
+      pygame.quit()
+    def on_combat(self, e):
+      combat_Scene = 0
+      while(self._player.health > 0 and e.health > 0):
+        pass
+    def on_execute(self):
+        if self.on_init() == False:
+            self._running = False
+ 
+        while( self._running ):
+            for event in pygame.event.get():
+                self.on_event(event)
+            self.on_loop()
+            self.on_render()
+        self.on_cleanup()
 
 class Character:
   def __init__(self):
     self.name = ""
     self.health = 1
     self.health_max = 1
-  def do_damage(self, enemy, damage):
+  def do_damage(self, target, damage):
     pass
 
 class Enemy(Character):
@@ -42,13 +167,6 @@ class Player(Character):
   def enemy_attacks(self):
     pass
 
-def Combat(self, Player, Enemy):
-  pass
-
-p = Player()
-e = Enemy()
-# insert dialogues here
-Combat(p, e)
-# insert dialogues here
-Combat(p, e)
-# insert dialogues here
+if __name__ == "__main__" :
+    theApp = App()
+    theApp.on_execute()
