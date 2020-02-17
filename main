@@ -6,42 +6,48 @@
 # -Determine and implement a score system for player
 # -Bugfixing lol
 # -Comments lol
+
 import pygame
 from pygame.locals import *
 from random import randint
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+blueButton = 22
+GPIO.setup(blueButton, GPIO.IN, GPIO.PUD_DOWN)
 
-Easy = ["1 X 1 = ?", "1 X 2 = ?", "1 X 3 = ?"]
-EasyAnswers = [1, 2, 3]
-Medium = ["11 X 11 = ?", "11 X 12 = ?", "11 X 13 = ?"]
-MediumAnswers = [121, 132, 143]
-Hard = ["6x + 8 = 50\nSolve for x", "-9x + 230 = 158\nSolve for x", "4x + 16 = 24"]
-HardAnswers = [7, 8, 2]
+black = (0,0,0)
+
+
+
+
+pygame.init()
 
 class App:
     def __init__(self):
+        pygame.init()
         self._running = True
         self._player = Player()
         self._scene = 0
         self._forward = False
         self._back = False
-        self._font = pygame.font.Font('freesansbold.ttf', 32)
-        self._display_surf = None
-        self.size = self.weight, self.height = 800, 600
-        self.display.set_caption("Arithma")
-        logo = pygame.image.load("Title_Image.png")
+        self._size = self.weight, self.height = 800, 600
+        self._font = pygame.font.Font('times-new-roman.ttf', 32)
+        self._display_surf = pygame.display.set_mode(self._size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        pygame.display.set_caption("Arithma")
+        logo = pygame.image.load("Arithma Title Final Blue Fitted.png")
         pygame.display.set_icon(logo)
-    def on_init(self):
         pygame.init()
-        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+    def on_init(self):
         self._running = True
  
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-        if event.type == pygame.GreenButton:
-          self._forward = True
-        if event.type == pygame.RedButton:
-          self._back = True
+        if event.type == pygame.KEYDOWN:
+          if event.key == pygame.K_RETURN:
+            self._forward = True
+       
     def on_loop(self):
         if(self._forward == True and not (self._scene % 2 == 0) or self._scene == 10):
           self._forward = False
@@ -73,59 +79,59 @@ class App:
     def on_render(self):
         if(self._scene == 0):
           self._display_surf.fill(black)
-          title_image = pygame.image.load("Title_Image")
-          self._display_surf.blit(title_image, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          title_image = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(title_image, (200, 200))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (300, 300))
           pygame.display.update
         if(self._scene == 1):
           self._display_surf.fill(black)
-          gameplay_explanation = pygame.image.load("Gameplay_Image")
+          gameplay_explanation = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(gameplay_explanation, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 2):
           self._display_surf.fill(black)
-          dialogue_one = pygame.image.load("Dialogue_One")
+          dialogue_one = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(dialogue_one, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 4):
           self._display_surf.fill(black)
-          dialogue_two = pygame.image.load("Dialogue_Two")
+          dialogue_two = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(dialogue_two, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 6):
           self._display_surf.fill(black)
-          dialogue_three = pygame.image.load("Dialogue_Three")
+          dialogue_three = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(dialogue_three, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 8):
           self._display_surf.fill(black)
-          dialogue_four = pygame.image.load("Dialogue_Four")
+          dialogue_four = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(dialogue_four, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 10):
           self._display_surf.fill(black)
-          final_dialogue = pygame.image.load("Final_Dialogue")
+          final_dialogue = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(final_dialogue, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
         if(self._scene == 11):
           self._display_surf.fill(black)
-          title_image = pygame.image.load("Title_Image")
+          title_image = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(title_image, (0, 0))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           text = self._font.render("Score = {}\nHealth = {} / {}".format(self._player.score, self._player.health, self._player.health_max), True, white)
           textRect = text.get_rect()
           textRect.center = (X // 2, Y // 2) 
@@ -135,9 +141,9 @@ class App:
       pygame.quit()
     def attack_screen(self):
       self._display_surf.fill(black)
-      player_icon = pygame.image.load("Player_Icon")
+      player_icon = pygame.image.load("Arithma Title Final Blue Fitted.png")
       self._display_surf.blit(player_icon, (0, 0))
-      enemy_icon = pygame.image.load("Enemy_Icon")
+      enemy_icon = pygame.image.load("Arithma Title Final Blue Fitted.png")
       self._display_surf.blit(enemy_icon, (0, 0))
       text = self._font.render("Health = {} / {}".format(self._player.health, self._player.health_max), True, white)
       textRect = text.get_rect()
@@ -163,51 +169,48 @@ class App:
         attack_confirmed = False
         if(combat_scene == 0):
           self.attack_screen()
-          attack_options = pygame.image.load("Attack_Options")
+          attack_options = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(attack_options, (700, 500))
           pygame.display.update
-        if(combat_scene == 0 and num_pad_one):
+        input_state = GPIO.input(22)
+        if(combat_scene == 0 and input_state == False):
           combat_scene += 1
           self.attack_screen()
-          attack_one = pygame.image.load("Attack_One")
+          attack_one = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(attack_one, (700, 500))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
           while(not attack_confirmed):
-            if (event.type == pygame.GreenButton):
-              attack_confirmed = True
-              combat_scene += 1
-              chosen_attack = 1
-            if(event.type == pygame.RedButton):
-              attack_confirmed = True
-              combat_scene -= 1
+            if (event.type == pygame.KEYDOWN):
+              if event.key == pygame.K_RETURN:
+                attack_confirmed = True
+                combat_scene += 1
+                chosen_attack = 1
         if(combat_scene == 0 and num_pad_two):
           combat_scene += 1
           self.attack_screen()
-          attack_two = pygame.image.load("Attack_Two")
+          attack_two = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(attack_two, (700, 500))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
           while(not attack_confirmed):
-            if (event.type == pygame.GreenButton):
-              attack_confirmed = True
-              combat_scene += 1
-              chosen_attack = 2
-            if(event.type == pygame.RedButton):
-              attack_confirmed = True
-              combat_scene -= 1
+            if (event.type == pygame.KEYDOWN):
+              if event.key == pygame.K_RETURN:
+                  attack_confirmed = True
+                  combat_scene += 1
+                  chosen_attack = 2
         if(combat_scene == 0 and num_pad_three):
           combat_scene += 1
           self.attack_screen()
-          attack_three = pygame.image.load("Attack_Three")
+          attack_three = pygame.image.load("Arithma Title Final Blue Fitted.png")
           self._display_surf.blit(attack_three, (700, 500))
-          green_Button = pygame.image.load("Green_Button")
-          self._display_surf.blit(green_Button, (700, 500))
+          return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+          self._display_surf.blit(return_button, (700, 500))
           pygame.display.update
           while(not attack_confirmed):
-            if (event.type == pygame.GreenButton):
+            if (event.type == pygame.KEYDOWN):
               attack_confirmed = True
               combat_scene += 1
               chosen_attack = 3
@@ -231,7 +234,7 @@ class App:
             problem = randint(0, Hard.__len__())
             problem_txt = Hard[problem]
             answer = HardAnswers[problem]
-          while(not (event.type == pygame.GreenButton) and timer > 0):
+          while(not (event.type == pygame.KEYDOWN) and timer > 0):
             self.attack_screen()
             text = self._font.render("{}".format(problem_txt), True, white)
             textRect = text.get_rect()
@@ -261,10 +264,10 @@ class App:
             clock.tick(100)
           if(player_answer == answer and not defense_round):
             self._player.do_damage(e, chosen_attack)
-            while(not (event.type == pygame.GreenButton)):
+            while(not (event.type == pygame.KEYDOWN)):
               self.attack_screen()
-              green_Button = pygame.image.load("Green_Button")
-              self._display_surf.blit(green_Button, (700, 500))
+              return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+              self._display_surf.blit(return_button, (700, 500))
               text = self._font.render("You have dealt {} damage!".format(str(chosen_attack * 5)), True, white)
               textRect = text.get_rect()
               textRect.center = (X // 2, Y // 2) 
@@ -272,10 +275,10 @@ class App:
               pygame.display.update
             defense_round = True
           elif(player_answer == answer):
-            while(not (event.type == pygame.GreenButton)):
+            while(not (event.type == pygame.KEYDOWN)):
               self.attack_screen()
-              green_Button = pygame.image.load("Green_Button")
-              self._display_surf.blit(green_Button, (700, 500))
+              return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+              self._display_surf.blit(return_button, (700, 500))
               text = self._font.render("You have defended against the attack!", True, white)
               textRect = text.get_rect()
               textRect.center = (X // 2, Y // 2) 
@@ -286,23 +289,27 @@ class App:
             chosen_attack = 0
           elif(defense_round):
             e.do_damage(self._player, chosen_attack)
-            while(not (event.type == pygame.GreenButton)):
-              self.attack_screen()
-              green_Button = pygame.image.load("Green_Button")
-              self._display_surf.blit(green_Button, (700, 500))
-              text = self._font.render("You have taken {} damage!".format(str(chosen_attack * 5)), True, white)
-              textRect = text.get_rect()
-              textRect.center = (X // 2, Y // 2) 
-              self._display_surf.blit(text, textRect) 
-              pygame.display.update
+            while True:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        break
+                        pass
+                self.attack_screen()
+                return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+                self._display_surf.blit(return_button, (700, 500))
+                text = self._font.render("You have taken {} damage!".format(str(chosen_attack * 5)), True, white)
+                textRect = text.get_rect()
+                textRect.center = (X // 2, Y // 2) 
+                self._display_surf.blit(text, textRect) 
+                pygame.display.update
             defense_round = False
             combat_scene = 0
             chosen_attack = 0
           else:
-            while(not (event.type == pygame.GreenButton)):
+            while(not (event.type == pygame.KEYDOWN)):
               self.attack_screen()
-              green_Button = pygame.image.load("Green_Button")
-              self._display_surf.blit(green_Button, (700, 500))
+              return_button = pygame.image.load("Arithma Title Final Blue Fitted.png")
+              self._display_surf.blit(return_button, (700, 500))
               text = self._font.render("{} defended against the attack!".format(e.name), True, white)
               textRect = text.get_rect()
               textRect.center = (X // 2, Y // 2) 
